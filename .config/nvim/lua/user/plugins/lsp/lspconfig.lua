@@ -117,6 +117,36 @@ return {
 		-- ============================
 		-- Language servers
 		-- ============================
+		local python = require("user.python")
+		local function python_root(bufnr, on_dir)
+			on_dir(python.root(bufnr))
+		end
+		vim.lsp.config("pyright", {
+			capabilities = capabilities,
+			root_dir = python_root,
+			before_init = function(_, config)
+				config.settings.python.pythonPath = python.python(config.root_dir)
+			end,
+			settings = {
+				pyright = { disableOrganizeImports = true },
+				python = {
+					analysis = {
+						autoSearchPaths = true,
+						useLibraryCodeForTypes = true,
+						diagnosticMode = "openFilesOnly",
+						typeCheckingMode = "basic",
+					},
+				},
+			},
+		})
+		vim.lsp.config("ruff", {
+			capabilities = capabilities,
+			root_dir = python_root,
+			on_attach = function(client)
+				client.server_capabilities.hoverProvider = false
+			end,
+		})
+		vim.lsp.enable({ "pyright", "ruff" })
 
 		-- TypeScript / TSX
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -135,6 +165,34 @@ return {
 		})
 
 		vim.lsp.enable("ts_ls")
+
+		-- HTML / CSS / Emmet / Tailwind
+		local web_servers = {
+			html = {
+				filetypes = { "html", "templ" },
+			},
+			cssls = {
+				filetypes = { "css", "scss", "less" },
+			},
+			emmet_ls = {
+				filetypes = {
+					"html",
+					"css",
+					"scss",
+					"less",
+					"javascriptreact",
+					"typescriptreact",
+					"svelte",
+				},
+			},
+			tailwindcss = {},
+		}
+
+		for server, server_config in pairs(web_servers) do
+			server_config.capabilities = capabilities
+			vim.lsp.config(server, server_config)
+			vim.lsp.enable(server)
+		end
 
 		-- ============================
 		-- Clang

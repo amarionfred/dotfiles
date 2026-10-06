@@ -6,7 +6,9 @@ return {
 	opts = {
 		ensure_installed = {
 			"codelldb",
+			"prettier",
 			"taplo",
+			"debugpy",
 		},
 		run_on_start = false,
 	},

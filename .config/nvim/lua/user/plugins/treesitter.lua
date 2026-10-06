@@ -67,6 +67,8 @@ return {
 			},
 			-- ensure these language parsers are installed
 			ensure_installed = {
+				"python",
+				"toml",
 				"json",
 				"javascript",
 				"typescript",
@@ -87,6 +89,7 @@ return {
 				"vimdoc",
 				"c",
 				"cpp",
+				"rust",
 			},
 			incremental_selection = {
 				enable = true,

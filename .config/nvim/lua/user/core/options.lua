@@ -38,7 +38,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function(args)
 		local bo = vim.bo[args.buf]
 		bo.autoindent = true
-		bo.smartindent = true
+		bo.smartindent = bo.filetype ~= "python"
 		bo.copyindent = true
 		bo.preserveindent = true
 	end,

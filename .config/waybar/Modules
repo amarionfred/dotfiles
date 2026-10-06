@@ -382,7 +382,7 @@
 },
 
 "wlr/taskbar": {
-	"format": "{icon} {name}",
+	"format": "{icon}",
 	"icon-size": 16,
 	"all-outputs": false,
 	"tooltip-format": "{title}",

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+umask 077
+
+notify_failure() {
+    notify-send -u critical 'Screenshot failed' "$1" 2>/dev/null || true
+}
+pictures_dir="$(xdg-user-dir PICTURES 2>/dev/null || printf '%s/Pictures' "$HOME")"
+save_dir="$pictures_dir/Screenshots"
+mkdir -p -- "$save_dir" || { notify_failure "Cannot create $save_dir"; exit 1; }
+
+case "${1:-region}" in
+    region) geometry="$(slurp)" || exit 0; [[ -n "$geometry" ]] || exit 0 ;;
+    full) geometry='' ;;
+    *) printf 'Usage: %s [region|full]\n' "$0" >&2; exit 2 ;;
+esac
+
+capture_tmp="$(mktemp "$save_dir/.capture-XXXXXXXX.png")" || { notify_failure 'Cannot create screenshot file. Check available disk space.'; exit 1; }
+trap 'rm -f -- "$capture_tmp"' EXIT
+capture_args=()
+[[ -n "$geometry" ]] && capture_args=(-g "$geometry")
+if ! grim "${capture_args[@]}" "$capture_tmp" || [[ ! -s "$capture_tmp" ]]; then
+    notify_failure 'Capture could not be saved. Check available disk space.'
+    exit 1
+fi
+capture_path="$save_dir/Screenshot-$(date +%Y-%m-%d_%H-%M-%S-%N).png"
+if ! mv -- "$capture_tmp" "$capture_path"; then
+    notify_failure "Could not save screenshot to $save_dir"
+    exit 1
+fi
+if timeout 5 wl-copy --type image/png < "$capture_path"; then
+    notify-send 'Screenshot saved and copied' "$capture_path" 2>/dev/null || true
+else
+    notify-send 'Screenshot saved' "$capture_path (clipboard copy failed)" 2>/dev/null || true
+fi
+printf '%s\n' "$capture_path"

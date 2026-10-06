@@ -100,7 +100,8 @@ return {
 		end
 
 		-----------------------------------------------------------------------
-		-- Debug configurations for C, C++, Rust
+		-- Debug configurations for C and C++. Rust configurations are generated
+		-- from Cargo metadata by rustaceanvim.
 		-----------------------------------------------------------------------
 		local cpp_configurations = {
 			{
@@ -131,7 +132,7 @@ return {
 
 		dap.configurations.cpp = cpp_configurations
 		dap.configurations.c = cpp_configurations
-		dap.configurations.rust = cpp_configurations
+		require("user.python").setup_dap(dap)
 
 		-----------------------------------------------------------------------
 		-- Keybindings

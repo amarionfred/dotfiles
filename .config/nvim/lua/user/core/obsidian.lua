@@ -4,16 +4,6 @@ local function expand(path)
 	return vim.fn.expand(path)
 end
 
-local function env_or(name, fallback)
-	local value = vim.env[name]
-
-	if value ~= nil and value ~= "" then
-		return expand(value)
-	end
-
-	return expand(fallback)
-end
-
 local function is_dir(path)
 	return vim.fn.isdirectory(path) == 1
 end
@@ -232,16 +222,10 @@ function M.workspaces()
 		end
 	end
 
-	local workspaces = {
-		{
-			name = "personal",
-			path = env_or("OBSIDIAN_VAULT_PERSONAL", "~/vaults/personal"),
-		},
-		{
-			name = "work",
-			path = env_or("OBSIDIAN_VAULT_WORK", "~/vaults/work"),
-		},
-	}
+	local workspaces = {}
+	if vim.env.OBSIDIAN_VAULT and vim.env.OBSIDIAN_VAULT ~= "" then
+		workspaces[1] = { name = "notes", path = expand(vim.env.OBSIDIAN_VAULT) }
+	end
 
 	local existing = {}
 	local seen = {}
@@ -271,28 +255,32 @@ function M.opts()
 	local workspaces = M.workspaces()
 
 	return {
+		legacy_commands = false,
 		workspaces = workspaces,
 		notes_subdir = "notes",
 		new_notes_location = "notes_subdir",
-		preferred_link_style = "wiki",
-		sort_by = "modified",
-		sort_reversed = true,
+		link = {
+			style = "wiki",
+		},
+		search = {
+			sort_by = "modified",
+			sort_reversed = true,
+		},
 		open_notes_in = "current",
 		completion = {
-			nvim_cmp = true,
 			min_chars = 2,
 		},
 		daily_notes = {
 			folder = "notes/dailies",
-			date_format = "%Y-%m-%d",
-			alias_format = "%A, %B %-d, %Y",
+			date_format = "YYYY-MM-DD",
+			alias_format = "dddd, MMMM D, YYYY",
 			default_tags = { "daily", "journal" },
 			template = find_daily_template(workspaces),
 		},
 		templates = {
 			folder = "templates",
-			date_format = "%Y-%m-%d",
-			time_format = "%H:%M",
+			date_format = "YYYY-MM-DD",
+			time_format = "HH:mm",
 			substitutions = {
 				weekday = function()
 					return os.date("%A")
@@ -311,7 +299,8 @@ function M.opts()
 
 			return string.format("%s-%s", os.date("%Y%m%d-%H%M"), suffix)
 		end,
-		note_frontmatter_func = function(note)
+		frontmatter = {
+			func = function(note)
 			if note.title then
 				note:add_alias(note.title)
 			end
@@ -328,27 +317,8 @@ function M.opts()
 				end
 			end
 
-			return out
-		end,
-		mappings = {
-			["gf"] = {
-				action = function()
-					return require("obsidian").util.gf_passthrough()
-				end,
-				opts = { noremap = false, expr = true, buffer = true },
-			},
-			["<CR>"] = {
-				action = function()
-					return require("obsidian").util.smart_action()
-				end,
-				opts = { buffer = true, expr = true },
-			},
-			["<leader>oc"] = {
-				action = function()
-					return require("obsidian").util.toggle_checkbox()
-				end,
-				opts = { buffer = true, desc = "Toggle checkbox" },
-			},
+				return out
+			end,
 		},
 		picker = {
 			name = "telescope.nvim",
@@ -362,19 +332,21 @@ function M.opts()
 			},
 		},
 		attachments = {
-			img_folder = "assets/imgs",
+			folder = "database/attachments",
 			img_name_func = function()
 				return string.format("%s-", os.date("%Y%m%d-%H%M%S"))
 			end,
 		},
-		follow_url_func = open_with_system,
-		follow_img_func = open_with_system,
 		ui = {
 			enable = false,
 		},
 		callbacks = {
 			enter_note = function()
 				M.setup_markdown_buffer(0)
+				vim.keymap.set("n", "<leader>oc", "<cmd>Obsidian toggle_checkbox<CR>", {
+					buffer = true,
+					desc = "Toggle checkbox",
+				})
 			end,
 		},
 	}

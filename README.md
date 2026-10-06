@@ -1,90 +1,50 @@
-# Personal Dotfiles
+# Arch / Hyprland dotfiles
 
-Personal Hyprland, terminal, shell, and Neovim setup.
+A shareable desktop, Zsh and Neovim configuration.
 
-This repo is meant to make a new Linux install feel familiar quickly: copy the config, install the common tools, sync Neovim, and keep the desktop/editor workflow compact.
+## Included
 
-## What's Included
+- Hyprland, wallpaper switching, Waybar, Mako and application launchers.
+- Kitty, Zsh, Starship and tmux.
+- Neovim with C/C++, Rust and ordinary Python editing, formatting, tests and debugging.
+- Cava, Fastfetch, GTK/font preferences, btop, desktop autostart and the Waybar user service override.
+- A screenshot helper that saves images and copies them to the clipboard.
 
-- `hypr/` - Hyprland session, binds, monitor layout, wallpaper cycling, and window rules.
-- `waybar/` - top bar layout and modules.
-- `kitty/` - terminal font, monochrome palette, cursor trail, and faint background mark.
-- `nvim/` - C/C++ focused Neovim config with LSP, Telescope, DAP, Treesitter, lualine, transparent backgrounds, and cursor smear.
-- `tmux/` - bottom status strip used by the `nv` helper.
-- `rofi/` and `wofi/` - launchers.
-- `mako/` - notifications.
-- `cava/` - audio visualizer config and shaders.
-- `fastfetch/` - compact system summary.
-- `fontconfig/` and `gtk-3.0/` - desktop font and GTK preferences.
-- `.zshrc`, `.tmux.conf`, and `.config/starship.toml` - shell, prompt, and terminal workflow.
+`install-files.txt` is the complete list of installed files. The repository uses a restricted path list and does not capture other home-directory contents.
 
 ## Install
 
-On a new system:
-
 ```sh
-git clone <this-repo-url> ~/dotfiles
+git clone https://github.com/amarionfred/dotfiles.git ~/dotfiles
 cd ~/dotfiles
+./install.sh --dry-run
 ./install.sh
 ```
 
-The installer is intentionally direct. It overwrites the matching config files in your home directory with the versions from this repo.
+The installer requires Python 3, backs up replaced files under `~/.local/state/dotfiles-backups/`, and leaves unrelated files alone. It expands `@HOME@` placeholders to your home directory. Use `--target-dir /path/to/home` to preview or install elsewhere.
 
-## Main Shortcuts
+Install your chosen applications separately. The main components are Hyprland, Waybar, Kitty, Zsh, Starship, tmux, Neovim, Rofi/Wofi, Mako, Hyprpaper, Cava and Fastfetch. Screenshots need `grim`, `slurp`, `wl-clipboard`, `xdg-user-dirs` and `notify-send`. The standalone screenshot helper uses Bash; no Bash startup configuration is installed.
 
-| Key | Action |
+Adjust the `eDP-1` monitor and Italian keyboard layout to your hardware. Reopen affected applications after installation. Kitty and the desktop session use `/usr/bin/zsh`; changing your account's login shell is a separate choice.
+
+## Neovim
+
+Run `:Lazy restore` to install the locked plugin versions and inspect `:Mason` for language tools. See [the Neovim guide](.config/nvim/README.md).
+
+Python uses an explicitly selected interpreter, a project virtual environment, an activated environment, or system Python. Optional Obsidian support discovers the current vault or uses `OBSIDIAN_VAULT`; no vault or personal workspace is bundled.
+
+## Common shortcuts
+
+| Shortcut | Action |
 | --- | --- |
-| `SUPER + Return` | Open Kitty |
-| `SUPER + D` | App launcher |
-| `SUPER + Q` | Close active window |
-| `SUPER + Shift + Q` | Exit Hyprland |
-| `SUPER + H/J/K/L` | Move focus |
-| `SUPER + Shift + H/J/K/L` | Move window |
-| `SUPER + F` | Toggle floating |
-| `SUPER + R` | Reload Hyprland |
-| `SUPER + W` | Cycle wallpaper |
-| `SUPER + Shift + R` | Refresh current wallpaper |
+| `Super Return` | Kitty |
+| `Super D` | App launcher |
+| `Super Q` | Close window |
+| `Super H/J/K/L` | Move focus |
+| `Super Shift H/J/K/L` | Move window |
+| `Super W` | Next wallpaper |
+| `Super S` | Select, save and copy screenshot |
+| `Print` / `Super Shift S` | Save and copy full screenshot |
+| `Space pr` / `Space pd` in Neovim | Run / debug Python |
 
-## Neovim Workflow
-
-Open Neovim from the project root:
-
-```sh
-cd ~/path/to/project
-nvim .
-```
-
-Use `nv` when `tmux` is installed and you want the bottom `[main] [nvim]` strip:
-
-```sh
-nv
-```
-
-Useful bindings:
-
-| Key | Action |
-| --- | --- |
-| `<Space>ff` | Find files |
-| `<Space>fw` | Live grep |
-| `<Space>fs` | Document symbols |
-| `<Space>fc` | Search word under cursor |
-| `<C-n>` | Toggle file tree |
-| `<Tab>` / `<S-Tab>` | Next / previous buffer |
-| `<Space>x` | Close current buffer |
-| `gd`, `gD`, `gi`, `gt` | LSP navigation |
-| `<Space>ca` | Code action |
-| `<Space>rn` | Rename symbol |
-| `<Space>d` / `<Space>D` | Line / buffer diagnostics |
-| `<Space>dc` | Continue debugger |
-| `<Space>db` | Toggle breakpoint |
-| `<Space>du` | Toggle debugger UI |
-
-## C/C++ Loop
-
-```sh
-cmake -S . -B build
-cmake --build build
-ctest --test-dir build
-```
-
-C and C++ buffers format through `clangd` on save.
+Use `nv` for Neovim in tmux. Review and copy changes to the relevant public configuration files manually; the repository has no automatic home-directory capture command.

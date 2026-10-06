@@ -32,6 +32,39 @@ return {
 				end,
 			},
 			mapping = cmp.mapping.preset.insert({
+				["<Tab>"] = cmp.mapping(function(fallback)
+					if cmp.visible() then
+						cmp.confirm({ select = true })
+					elseif luasnip.expand_or_locally_jumpable() then
+						luasnip.expand_or_jump()
+					elseif vim.tbl_contains({
+						"html",
+						"css",
+						"scss",
+						"less",
+						"javascriptreact",
+						"typescriptreact",
+						"svelte",
+					}, vim.bo.filetype) and vim.api.nvim_get_current_line():sub(1, vim.api.nvim_win_get_cursor(0)[2]):match("%S+$") then
+						cmp.complete()
+						vim.defer_fn(function()
+							if cmp.visible() then
+								cmp.confirm({ select = true })
+							end
+						end, 150)
+					else
+						fallback()
+					end
+				end, { "i", "s" }),
+				["<S-Tab>"] = cmp.mapping(function(fallback)
+					if cmp.visible() then
+						cmp.select_prev_item()
+					elseif luasnip.locally_jumpable(-1) then
+						luasnip.jump(-1)
+					else
+						fallback()
+					end
+				end, { "i", "s" }),
 				["<C-k>"] = cmp.mapping.select_prev_item(),
 				["<C-j>"] = cmp.mapping.select_next_item(),
 				["<C-b>"] = cmp.mapping.scroll_docs(-4),

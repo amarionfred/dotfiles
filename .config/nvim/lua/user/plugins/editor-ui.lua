@@ -9,14 +9,26 @@ return {
 			},
 			scope = {
 				enabled = true,
+				char = "▏",
 				show_start = false,
 				show_end = false,
 				highlight = "IblScope",
 			},
 		},
 		config = function(_, opts)
-			vim.api.nvim_set_hl(0, "IblIndent", { fg = "#1a1a1a", nocombine = true })
-			vim.api.nvim_set_hl(0, "IblScope", { fg = "#454545", nocombine = true })
+			local function set_indent_highlights()
+				-- Koda clears plugin highlights while loading. Reapply the same
+				-- understated values used by base16-default-dark so its guides do
+				-- not look heavier after a theme switch.
+				vim.api.nvim_set_hl(0, "IblIndent", { fg = "#383838", nocombine = true })
+				vim.api.nvim_set_hl(0, "IblScope", { fg = "#50505d", nocombine = true })
+			end
+
+			set_indent_highlights()
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				group = vim.api.nvim_create_augroup("ConsistentThinIndentGuides", { clear = true }),
+				callback = set_indent_highlights,
+			})
 			require("ibl").setup(opts)
 		end,
 	},

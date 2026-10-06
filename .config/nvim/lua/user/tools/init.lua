@@ -19,6 +19,7 @@ function M.setup()
 
 	require("user.tools.cpp_extract").setup()
 	require("user.tools.cpp_trivial_constructor").setup()
+	require("user.tools.live_server").setup()
 end
 
 return M
