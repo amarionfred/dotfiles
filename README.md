@@ -1,6 +1,6 @@
 # Arch / Hyprland dotfiles
 
-A shareable desktop, Zsh and Neovim configuration.
+A shareable desktop configuration.
 
 ## Included
 
@@ -10,7 +10,7 @@ A shareable desktop, Zsh and Neovim configuration.
 - Cava, Fastfetch, GTK/font preferences, btop, desktop autostart and the Waybar user service override.
 - A screenshot helper that saves images and copies them to the clipboard.
 
-`install-files.txt` is the complete list of installed files. The repository uses a restricted path list and does not capture other home-directory contents.
+`install-files.txt` is the complete list of installed files. 
 
 ## Install
 
@@ -31,7 +31,7 @@ Adjust the `eDP-1` monitor and Italian keyboard layout to your hardware. Reopen 
 
 Run `:Lazy restore` to install the locked plugin versions and inspect `:Mason` for language tools. See [the Neovim guide](.config/nvim/README.md).
 
-Python uses an explicitly selected interpreter, a project virtual environment, an activated environment, or system Python. Optional Obsidian support discovers the current vault or uses `OBSIDIAN_VAULT`; no vault or personal workspace is bundled.
+Optional Obsidian support discovers the current vault or uses `OBSIDIAN_VAULT`; no vault or personal workspace is bundled.
 
 ## Common shortcuts
 
