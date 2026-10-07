@@ -27,8 +27,6 @@
 .config/hypr/wallpapers/aurelius-04-hands.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-49-34.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-49-39.jpg
-.config/hypr/wallpapers/photo_2026-10-07_12-49-43.jpg
-.config/hypr/wallpapers/photo_2026-10-07_12-49-47.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-49-52.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-49-58.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-50-01.jpg
@@ -37,6 +35,7 @@
 .config/hypr/wallpapers/photo_2026-10-07_12-50-27.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-50-31.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-50-34.jpg
+.config/hypr/wallpapers/photo_2026-10-07_13-07-41.jpg
 .config/kitty/kitty.conf
 .config/kitty/watermark/arch-smudge.png
 .config/mako/config
