@@ -31,7 +31,6 @@
 .config/hypr/wallpapers/photo_2026-10-07_12-49-58.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-50-01.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-50-06.jpg
-.config/hypr/wallpapers/photo_2026-10-07_12-50-13.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-50-27.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-50-31.jpg
 .config/hypr/wallpapers/photo_2026-10-07_12-50-34.jpg
